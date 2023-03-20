@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="(team, teamNumber) in form.team" :key="teamNumber" style="width: 50%;">
+        <div v-for="(team, teamNumber) in form" :key="teamNumber" style="width: 50%;">
             <div style="margin-bottom: 5px">
                 {{ teamNumber }}
             </div>
@@ -12,26 +12,42 @@
                 <el-button class="el-icon-minus" @click="numberOfTeams--" />
             </div>
         </div>
-        <el-button @click="numberOfTeams++">+</el-button>
+        <el-button @click="addTeam">+</el-button>
     </div>
  
 </template>
 
 <script setup lang="ts">
-import { ref } from '@nuxtjs/composition-api'
+import { ref, set } from '@nuxtjs/composition-api'
 import debounce from 'lodash/debounce';
 
-const defaultForm = () =>  ({
-    team: {'Team 1' : { player1: '', player2: '' }}
-})
+interface Form{
+    [key: string]: {
+        [key:string] :string
+    }
+} 
 
-const numberOfTeams = ref(1)
+const defaultForm = () =>  ({
+    'Team 1' : { player1: '', player2: '' }
+}) as Form
+
 const form = ref(defaultForm())
 
+const numberOfTeams = ref(1)
 const updateTeam = debounce(function (event: string){
     console.log(event)
 
 }, 500)
+
+function addTeam(){
+    form.value = {
+    ...form.value,
+    ['Team 2']:  { player1: '', player2: '' }
+  } as Form
+
+
+    
+}
 
 
 
